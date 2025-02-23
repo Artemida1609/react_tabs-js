@@ -6,20 +6,14 @@ function showContent(tabs, activeId) {
       <div className="block" data-cy="TabContent">
         {activated.content}
       </div>
-    )
+    );
   }
 
   return null;
 }
 
-export const Tabs = ({
-  tabs, 
-  activeTabId, 
-  onTabSelected,
-  }) => {
-
-  const valideIds = ["tab-1", "tab-2", "tab-3"];
-  const finalId = valideIds.includes(activeTabId) ? activeTabId : "tab-1";
+export const Tabs = ({ tabs, activeTabId, onTabSelected }) => {
+  const activeTab = tabs.find(tab => tab.id === activeTabId) || tabs[0];
 
   return (
     <div data-cy="TabsComponent">
@@ -29,19 +23,30 @@ export const Tabs = ({
             return (
               <li
                 key={tab.id}
-                data-cy="Tab" 
+                data-cy="Tab"
                 onClick={() => {
-                  tab.id !== activeTabId &&
-                    onTabSelected(tab.id)
+                  if (tab.id !== activeTabId) {
+                    onTabSelected(tab.id);
+                  }
                 }}
-                className={tab.id === finalId
-                   ? "is-active" : ""}
+                onKeyDown={event => {
+                  if (
+                    (event.key === 'Enter' || event.key === ' ') &&
+                    tab.id !== activeTabId
+                  ) {
+                    onTabSelected(tab.id);
+                  }
+                }}
+                tabIndex={0}
+                role="tab"
+                aria-selected={tab.id === activeTab.id}
+                className={tab.id === activeTab.id ? 'is-active' : ''}
               >
                 <a href={`#${tab.id}`} data-cy="TabLink">
                   {tab.title}
                 </a>
               </li>
-            )
+            );
           })}
         </ul>
       </div>

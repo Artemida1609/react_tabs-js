@@ -21,7 +21,7 @@ function showTitle(tabs, activeId) {
 }
 
 export const App = () => {
-  const [selected, setSelected] = useState('tab-1');
+  const [selected, setSelected] = useState(tabs[0].id);
 
   return(
   <div className="section">
